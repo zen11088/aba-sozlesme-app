@@ -1,1 +1,14 @@
-[]
+[
+  {
+    "id": 1,
+    "name": "John Doe",
+    "phone": "1",
+    "password": "1"
+  },
+  {
+    "id": 2,
+    "name": "Jane Smith",
+    "phone": "0987654321",
+    "password": "1234567890"
+  }
+]

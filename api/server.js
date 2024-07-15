@@ -18,16 +18,16 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.post("/login", (req, res) => {
-  const { email, password } = req.body;
+  const { phone, password } = req.body;
   const users = readUsersFromFile();
 
   const user = users.find(
-    (user) => user.email === email && user.password === password
+    (user) => user.phone === phone && user.password === password
   );
 
   if (user) {
     const token = jwt.sign(
-      { id: user.id, name: user.name, email: user.email },
+      { id: user.id, name: user.name, phone: user.phone },
       SECRET_KEY,
       {
         expiresIn: "1h",
@@ -35,7 +35,7 @@ app.post("/login", (req, res) => {
     );
     res.json({ token });
   } else {
-    res.status(401).json({ message: "Geçersiz email veya şifre" });
+    res.status(401).json({ message: "Geçersiz telefon numarası veya şifre" });
   }
 });
 
