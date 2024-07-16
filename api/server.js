@@ -3,7 +3,12 @@ const jwt = require("jsonwebtoken");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 require("dotenv").config();
-const { readUsersFromFile, writeUsersToFile, verifyToken } = require("./utils");
+const {
+  readUsersFromFile,
+  writeUsersToFile,
+  verifyToken,
+  delayMiddleware,
+} = require("./utils");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -16,6 +21,7 @@ if (!SECRET_KEY) {
 
 app.use(bodyParser.json());
 app.use(cors());
+app.use(delayMiddleware);
 
 app.post("/login", (req, res) => {
   const { phone, password } = req.body;
@@ -81,6 +87,17 @@ app.delete("/users/:id", verifyToken, (req, res) => {
     const deletedUser = users.splice(userIndex, 1);
     writeUsersToFile(users);
     res.json(deletedUser[0]);
+  } else {
+    res.status(404).json({ message: "Kullanıcı bulunamadı" });
+  }
+});
+
+app.get("/profile", verifyToken, (req, res) => {
+  const users = readUsersFromFile();
+  const user = users.find((user) => user.id === req.user.id);
+
+  if (user) {
+    res.json(user);
   } else {
     res.status(404).json({ message: "Kullanıcı bulunamadı" });
   }

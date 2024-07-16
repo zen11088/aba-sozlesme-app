@@ -4,10 +4,9 @@ import { useAuth } from "../context/useAuth";
 
 const PrivateRoute = () => {
   const { user } = useAuth();
-  console.log("PrivateRoute user:", user);
 
   if (user === null) {
-    return <div>Loading...</div>; // Yüklenme göstergesi
+    return;
   }
 
   return user && user.token ? <Outlet /> : <Navigate to="/login" />;

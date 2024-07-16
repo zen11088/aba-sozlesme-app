@@ -31,8 +31,18 @@ const verifyToken = (req, res, next) => {
   }
 };
 
+const delayMiddleware = (req, res, next) => {
+  const DELAY_MS = parseInt(process.env.DELAY_MS) || 0;
+  if (DELAY_MS > 0) {
+    setTimeout(() => next(), DELAY_MS);
+  } else {
+    next();
+  }
+};
+
 module.exports = {
   readUsersFromFile,
   writeUsersToFile,
   verifyToken,
+  delayMiddleware,
 };

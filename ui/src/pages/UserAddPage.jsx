@@ -1,12 +1,15 @@
 import React from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button, Form, Input, message } from "antd";
-import { useMutation } from "react-query";
-import { addUser } from "../api/api"; // Doğru yolu kontrol edin
+import { addUser } from "../api/api";
 
 const UserAddPage = () => {
   const [form] = Form.useForm();
-  const { mutate, isLoading } = useMutation(addUser, {
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation(addUser, {
     onSuccess: () => {
+      queryClient.invalidateQueries("users");
       message.success("Kullanıcı başarıyla eklendi");
       form.resetFields();
     },
@@ -16,15 +19,15 @@ const UserAddPage = () => {
   });
 
   const onFinish = (values) => {
-    mutate(values);
+    mutation.mutate(values);
   };
 
   return (
     <Form form={form} onFinish={onFinish} layout="vertical">
       <Form.Item
         name="name"
-        label="Ad"
-        rules={[{ required: true, message: "Lütfen adınızı girin" }]}
+        label="İsim"
+        rules={[{ required: true, message: "Lütfen isminizi girin" }]}
       >
         <Input />
       </Form.Item>
@@ -43,7 +46,7 @@ const UserAddPage = () => {
         <Input.Password />
       </Form.Item>
       <Form.Item>
-        <Button type="primary" htmlType="submit" loading={isLoading}>
+        <Button type="primary" htmlType="submit" loading={mutation.isLoading}>
           Kullanıcı Ekle
         </Button>
       </Form.Item>

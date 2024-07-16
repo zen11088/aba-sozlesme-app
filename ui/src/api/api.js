@@ -3,12 +3,11 @@ import Cookies from "js-cookie";
 
 const api = axios.create({
   baseURL: "http://localhost:5000",
-  // withCredentials: true // Çerezlerin otomatik gönderilmesi için, bunu kullanmıyoruz
 });
 
 api.interceptors.request.use((config) => {
-  const token = Cookies.get("token"); // Çerezden token'ı al
-  console.log("Adding token to headers:", token);
+  const token = Cookies.get("token");
+
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -27,5 +26,10 @@ export const fetchUsers = async () => {
 
 export const addUser = async (user) => {
   const { data } = await api.post("/users", user);
+  return data;
+};
+
+export const fetchProfile = async () => {
+  const { data } = await api.get("/profile");
   return data;
 };

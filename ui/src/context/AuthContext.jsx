@@ -8,22 +8,17 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const token = Cookies.get("token");
-    console.log("Loaded token from cookies:", token);
     if (token) {
       setUser({ token });
-      console.log("User set with token:", token);
     }
   }, []);
 
   const login = (userData) => {
-    console.log("Login called with userData:", userData);
     setUser(userData);
     Cookies.set("token", userData.token, { expires: 1 });
-    console.log("Token set in cookies:", userData.token);
   };
 
   const logout = () => {
-    console.log("Logout called");
     setUser(null);
     Cookies.remove("token");
   };
