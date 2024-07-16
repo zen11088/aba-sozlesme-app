@@ -27,7 +27,7 @@ app.post("/login", (req, res) => {
 
   if (user) {
     const token = jwt.sign(
-      { id: user.id, name: user.name, phone: user.phone },
+      { id: user.id, name: user.name, phone: user.phone, role: user.role },
       SECRET_KEY,
       {
         expiresIn: "1h",
