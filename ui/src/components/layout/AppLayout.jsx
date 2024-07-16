@@ -1,18 +1,15 @@
 import React from "react";
 import { Layout, Menu } from "antd";
-import { Link, Outlet, useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/useAuth";
+import { Link, useNavigate } from "react-router-dom";
 import AppContent from "./AppContent";
 import AppHeader from "./AppHeader";
 
-const { Header, Content, Footer, Sider } = Layout;
+const { Sider } = Layout;
 
 const AppLayout = () => {
-  const { logout } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    logout();
     navigate("/login");
   };
 
@@ -28,7 +25,7 @@ const AppLayout = () => {
       <AppHeader />
       <Layout className="site-layout">
         <Sider collapsible>
-          <Menu theme="dark" mode="inline" items={menuItems} />
+          <Menu items={menuItems} />
         </Sider>
         <AppContent />
       </Layout>

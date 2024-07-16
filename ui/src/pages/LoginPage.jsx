@@ -1,31 +1,29 @@
 import React from "react";
 import { Button, Form, Input, message, Row, Col, Card } from "antd";
-import { useAuth } from "../context/useAuth";
 import { useMutation } from "@tanstack/react-query";
 import { login } from "../api/api";
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
 const LoginPage = () => {
   const [form] = Form.useForm();
-  const { user, login: authLogin } = useAuth();
   const [messageApi, contextHolder] = message.useMessage();
+  const navigate = useNavigate();
 
   const mutation = useMutation({
     mutationFn: login,
     onSuccess: (data) => {
-      authLogin({ token: data.token });
       Cookies.set("token", data.token, { expires: 1 });
       messageApi.success("Giriş başarılı");
+
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 1000);
     },
     onError: () => {
       messageApi.error("Geçersiz telefon numarası veya şifre");
     },
   });
-
-  if (user && user.token) {
-    return <Navigate to="/dashboard" />;
-  }
 
   const onFinish = (values) => {
     mutation.mutate(values);
